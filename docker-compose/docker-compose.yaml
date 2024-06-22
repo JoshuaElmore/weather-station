@@ -1,0 +1,43 @@
+services:
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - '80:3000'
+    volumes:
+      - grafana_grafana-storage:/var/lib/grafana
+    environment:
+      - GF_SERVER_ROOT_URL=https://weather.jelmorehome.com
+
+  influxdb2:
+    image: influxdb:2
+    container_name: influxdb2
+    restart: unless-stopped
+    ports:
+      - '8086:8086'
+    volumes:
+      - influxdb2-data:/var/lib/influxdb2
+      - influxdb2-config:/etc/influxdb2
+
+  datacollector:
+    build:
+      context: /home/t1jelmore@jelmorehome.com/datacolector
+      dockerfile: Dockerfile
+    container_name: datacollector
+    restart: unless-stopped
+    environment:
+      - INFLUXDB_URL=http://grafana.jelmorehome.com:8086
+      - INFLUXDB_TOKEN=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+      - INFLUXDB_ORG=jelmorehome.com
+      - INFLUXDB_BUCKET=weathertest
+      - WEATHER_API_URI=http://weather.local.com:8000/all/
+      - LOCATION_NAME=washingtonHome
+
+volumes:
+  grafana_grafana-storage:
+    external: true
+  influxdb2-data:
+    external: true
+  influxdb2-config:
+    external: true

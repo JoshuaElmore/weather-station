@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Activate the virtual environment
+. /weather/.venv/bin/activate
+
+cd /weather
+
+# Use the Python interpreter from the virtual environment
+uvicorn main:app --host 0.0.0.0 --port 8000
+
+# Deactivate the virtual environment
+deactivate
