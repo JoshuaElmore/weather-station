@@ -1,9 +1,10 @@
-import influxdb_client, os, time,json,requests
+import influxdb_client, os, time, json, requests
 from influxdb_client import Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 
 import signal
 import sys
+import datetime
 
 #Graceful shutdown the script
 def handle_sigterm(*args):
@@ -25,7 +26,11 @@ weather_uri = os.environ.get("WEATHER_API_URI")
 write_api = client.write_api(write_options=SYNCHRONOUS)
 
 while True:
-    time.sleep(60) # separate points by 60 second
+    # Get the current time
+    current_time = datetime.datetime.now()
+    # Calculate the delay to the next minute
+    delay = 60 - (current_time.second + current_time.microsecond / 1E6)
+    time.sleep(delay) # Sleep until the top of the next minute
 
     point = Point("weather").tag("location", location)
 
