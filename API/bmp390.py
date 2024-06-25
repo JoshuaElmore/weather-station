@@ -46,7 +46,7 @@ class bmp390(Sensor):
     def update_queue(self) -> dict[str, Any]:
         data={
             "pressure": self.sensor.pressure ,
-            "temperature": self.sensor.temperature ,
+            "internal_temperature": self.sensor.temperature ,
             "altitude":self.sensor.altitude,
             }
         return data
@@ -60,5 +60,5 @@ class bmp390(Sensor):
 
 class bmp390_default(BaseModel):
     pressure: float = Field(..., example=1002.8542979288461)
-    temperature: float = Field(..., example=24.224413672694936)
+    internal_temperature: float = Field(..., example=24.224413672694936)
     altitude: float = Field(..., example=86.58501032365115)
